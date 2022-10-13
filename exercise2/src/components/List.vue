@@ -7,9 +7,9 @@
   </ul>
   <div class="pagination">
     <ul>
-      <li @click="changePage(currentPage-1)" :class="{disabled: currentPage === 0}">&lt;</li>
-      <li v-for="p in pages" :key="p" @click="changePage(p)" :class="{active: p === currentPage}">{{ p + 1 }}</li>
-      <li @click="changePage(currentPage+1)" :class="{disabled: currentPage === pages.length - 1}">&gt;</li>
+      <li @click="$emit('changePage', currentPage-1)" :class="{disabled: currentPage === 0}">&lt;</li>
+      <li v-for="p in pages" :key="p" @click="$emit('changePage', p)" :class="{active: p === currentPage}">{{ p + 1 }}</li>
+      <li @click="$emit('changePage', currentPage+1)" :class="{disabled: currentPage === pages.length - 1}">&gt;</li>
     </ul>
   </div>
 
@@ -26,7 +26,7 @@
     computed: {
       // sort data by name
       sortedData() {
-        return this.data.sort((a, b)=>{
+        return [...this.data].sort((a, b)=>{
           if (a.name < b.name) {
             return -1;
           } else if (a.name > b.name) {
@@ -50,11 +50,7 @@
         return (this.options.pagination.offset / this.options.pagination.limit);
       },
     },
-    methods: {
-      changePage(page) {
-        this.options.pagination.offset = (page) * this.options.pagination.limit;
-      },
-    },
+    emits: ['changePage'],
   };
 
 </script>
